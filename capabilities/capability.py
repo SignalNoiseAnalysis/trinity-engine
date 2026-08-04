@@ -1,0 +1,20 @@
+from abc import ABC, abstractmethod
+import json
+
+class Capability(ABC):
+
+    def __init__(self):
+        self.x = 5
+
+    @abstractmethod
+    def provide_description(self):
+        pass
+
+    @abstractmethod
+    def provide_actions(self):
+        pass
+
+    @abstractmethod
+    def load_rules(self):
+            pass
+
