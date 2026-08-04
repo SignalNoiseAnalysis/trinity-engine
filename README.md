@@ -10,3 +10,12 @@ Capability knowledge remains localized to each capability.
 
 The goal is not to maximize AI autonomy.
 The goal is to maximize system reliability.
+
+### Why deterministic execution?
+Execution should be separated from the LLM. Having determinisitc code handle execution makes the system reliable and testable.
+### Why capabilities?
+Capabilities act as a contract to let users plug and play different modules into the Trinity Engine and keeps these capabilities self contained.
+### Why JSON as the planning contract?
+JSON allows for schema validation, easy parsing for value validation, and easy logging of the LLM output.
+### Why keep domain knowledge inside capabilities?
+The execution engine does not need to own the rules, validation schemas, and execution handling of capabilities. The capabilities should own those and be the arbiters of the information.
