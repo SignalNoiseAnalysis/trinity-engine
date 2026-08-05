@@ -14,3 +14,4 @@ class Planner:
         )
 
         print(response['message']['content'])
+        return json.loads(response['message']['content'])

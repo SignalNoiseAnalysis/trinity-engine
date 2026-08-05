@@ -7,14 +7,18 @@ class Capability(ABC):
         self.x = 5
 
     @abstractmethod
-    def provide_description(self):
+    def load_description(self):
         pass
 
     @abstractmethod
-    def provide_actions(self):
+    def load_actions(self):
         pass
 
     @abstractmethod
     def load_rules(self):
-            pass
+        pass
+
+    @abstractmethod
+    def handle_command(self, command):
+        pass
 

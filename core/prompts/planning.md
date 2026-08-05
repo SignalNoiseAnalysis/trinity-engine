@@ -15,5 +15,5 @@ Rules:
 Multiple Commands format:
 
 {
-    "commands" = [...]
+    "commands": [...]
 }
