@@ -1,0 +1,81 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "intent",
+        "action",
+        "target",
+        "parameters"
+    ],
+    "properties": {
+        "intent": {
+            "type": "string",
+            "enum": [
+                "control_lights",
+                "control_music"
+            ]
+        },
+        "action": {
+            "type": "string",
+            "enum": [
+                "set_state",
+                "query_state"
+            ]
+        },
+        "target": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "type"
+                    ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "const": "all"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "type",
+                        "id"
+                    ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "const": "room"
+                        },
+                        "id": {
+                            "type": "string",
+                            "minLength": 1
+                        }
+                    }
+                }
+            ]
+        },
+        "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "minProperties": 1,
+            "properties": {
+                "power": {
+                    "type": "string",
+                    "enum": [
+                        "on",
+                        "off"
+                    ]
+                },
+                "brightness": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                }
+            }
+        }
+    }
+}

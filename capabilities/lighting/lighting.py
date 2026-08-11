@@ -15,6 +15,13 @@ class Lighting(capability.Capability):
         self.api_key = os.getenv("GOVEE_API_KEY")
         self.client = GoveeClient(api_key=self.api_key, prefer_lan=True)
         self.devices = self.client.discover_devices()
+        self.name = "Lighting"
+
+    def get_name(self):
+        return self.name
+
+    def get_validation_schema(self):
+        return self.validation_schema
 
     def load_description(self):
         self.y = 5
@@ -27,6 +34,12 @@ class Lighting(capability.Capability):
             file_content = file.read()
 
         self.rules = file_content
+
+    def load_validation_schema(self):
+        with open(os.path.dirname(os.path.abspath(__file__)) + '/command_schema.json', 'r') as file:
+            file_content = file.read()
+
+        self.validation_schema = json.loads(file_content)
 
     def handle_command(self, command):
         if command['intent'] == 'control_lights':

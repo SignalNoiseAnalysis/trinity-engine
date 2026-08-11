@@ -4,7 +4,15 @@ import json
 class Capability(ABC):
 
     def __init__(self):
-        self.x = 5
+        pass
+
+    @abstractmethod
+    def get_name(self):
+        pass
+
+    @abstractmethod
+    def get_validation_schema(self):
+        pass
 
     @abstractmethod
     def load_description(self):
