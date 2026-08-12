@@ -14,6 +14,6 @@ class PromptBuilder:
             },
             {
                 "role":"user",
-                "content": 'Turn off all the lights'
+                "content": 'Turn off all of the lights and check the weather'
             }
         ]

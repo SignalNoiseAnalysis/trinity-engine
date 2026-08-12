@@ -17,6 +17,12 @@ class Lighting(capability.Capability):
         self.devices = self.client.discover_devices()
         self.name = "Lighting"
 
+        self.load_validation_schema()
+        self.load_description()
+        self.load_actions()
+        self.load_rules()
+
+
     def get_name(self):
         return self.name
 
@@ -24,7 +30,10 @@ class Lighting(capability.Capability):
         return self.validation_schema
 
     def load_description(self):
-        self.y = 5
+        with open(os.path.dirname(os.path.abspath(__file__)) + '/description.md', 'r') as file:
+            file_content = file.read()
+        
+        self.description = file_content
 
     def load_actions(self):
         self.x = 5
