@@ -15,7 +15,7 @@ class Lighting(capability.Capability):
         self.api_key = os.getenv("GOVEE_API_KEY")
         self.client = GoveeClient(api_key=self.api_key, prefer_lan=True)
         self.devices = self.client.discover_devices()
-        self.name = "Lighting"
+        self.name = "lighting"
 
         self.load_validation_schema()
         self.load_description()

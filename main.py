@@ -8,23 +8,33 @@ from capabilities.lighting import lighting
 import json
 
 planner = planner.Planner('llama3.2:3b')
-
 prompt_builder = prompt_builder.PromptBuilder()
+executor = executor.Executor()
+validator = validator.Validator()
+registry = capability_registry.CapabilityRegistry()
 
 lighting = lighting.Lighting()
 
-registry = capability_registry.CapabilityRegistry()
 registry.register(lighting)
 
-executor = executor.Executor()
+capability_descriptions = ""
+for key in registry.registry.keys():
+    capability_descriptions += registry.registry[key].description
+    capability_descriptions += "\n"
 
-validator = validator.Validator()
-prompt = prompt_builder.build_prompt(lighting.description, planner.capability_discovery_prompt)
+capability_discovery_prompt = prompt_builder.build_prompt(capability_descriptions, planner.capability_discovery_prompt)
 
-commands = planner.plan(prompt)
+discovered_capabilities = planner.plan(capability_discovery_prompt)
 
-print(commands)
+capability_rules = ""
+for capability in discovered_capabilities["capabilities"]:
+    capability_rules += registry.registry[capability].rules
+    capability_rules += "\n"
 
-# for command in commands['commands']:
-#     if validator.validate(command['command'], registry.get_registered_capability(command['capability']).get_validation_schema()):
-#         executor.execute_command(registry.get_registered_capability(command['capability']), command["command"])
+command_prompt = prompt_builder.build_prompt(capability_rules, planner.planning_prompt)
+
+commands = planner.plan(command_prompt)
+
+for command in commands['commands']:
+    if validator.validate(command['command'], registry.get_registered_capability(command['capability']).get_validation_schema()):
+        executor.execute_command(registry.get_registered_capability(command['capability']), command["command"])
