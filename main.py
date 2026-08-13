@@ -3,6 +3,7 @@ from core import prompt_builder
 from core import validator
 from core import capability_registry
 from core import executor
+from core import authenticator
 from capabilities import capability
 from capabilities.lighting import lighting
 import json
@@ -12,6 +13,7 @@ prompt_builder = prompt_builder.PromptBuilder()
 executor = executor.Executor()
 validator = validator.Validator()
 registry = capability_registry.CapabilityRegistry()
+authenticator = authenticator.Authenticator()
 
 lighting = lighting.Lighting()
 
@@ -38,11 +40,8 @@ if validator.validate(discovered_capabilities, planner.intent_discovery_validati
     commands = planner.plan(command_prompt)
 
     if validator.validate(commands, planner.envelope_validation_schema):
-        print("Woo!")
         for command in commands["commands"]:
-            print(command)
             if validator.validate(command, planner.capability_command_wrapper_validation_schema):
-                print("Woohoo!")
                 if validator.validate(command['command'], registry.get_registered_capability(command['capability'].lower()).get_validation_schema()):
-                    print("YEEEEHAWWWW!")
+                    authenticator.authenticate(command["command"], None)
                     executor.execute_command(registry.get_registered_capability(command['capability'].lower()), command["command"])
