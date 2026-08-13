@@ -22,19 +22,27 @@ for key in registry.registry.keys():
     capability_descriptions += registry.registry[key].description
     capability_descriptions += "\n"
 
-capability_discovery_prompt = prompt_builder.build_prompt(capability_descriptions, planner.capability_discovery_prompt)
+capability_discovery_prompt = prompt_builder.build_prompt(capability_descriptions, planner.intent_discovery_prompt)
 
 discovered_capabilities = planner.plan(capability_discovery_prompt)
 
-capability_rules = ""
-for capability in discovered_capabilities["capabilities"]:
-    capability_rules += registry.registry[capability].rules
-    capability_rules += "\n"
+if validator.validate(discovered_capabilities, planner.intent_discovery_validation_schema):
 
-command_prompt = prompt_builder.build_prompt(capability_rules, planner.planning_prompt)
+    capability_rules = ""
+    for capability in discovered_capabilities["capabilities"]:
+        capability_rules += registry.registry[capability.lower()].rules
+        capability_rules += "\n"
 
-commands = planner.plan(command_prompt)
+    command_prompt = prompt_builder.build_prompt(capability_rules, planner.planning_prompt)
 
-for command in commands['commands']:
-    if validator.validate(command['command'], registry.get_registered_capability(command['capability']).get_validation_schema()):
-        executor.execute_command(registry.get_registered_capability(command['capability']), command["command"])
+    commands = planner.plan(command_prompt)
+
+    if validator.validate(commands, planner.envelope_validation_schema):
+        print("Woo!")
+        for command in commands["commands"]:
+            print(command)
+            if validator.validate(command, planner.capability_command_wrapper_validation_schema):
+                print("Woohoo!")
+                if validator.validate(command['command'], registry.get_registered_capability(command['capability'].lower()).get_validation_schema()):
+                    print("YEEEEHAWWWW!")
+                    executor.execute_command(registry.get_registered_capability(command['capability'].lower()), command["command"])

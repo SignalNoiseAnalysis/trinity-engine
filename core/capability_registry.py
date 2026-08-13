@@ -6,7 +6,7 @@ class CapabilityRegistry():
         self.registry = {}
 
     def register(self, capability):
-        self.registry[capability.get_name()] = capability
+        self.registry[capability.get_name().lower()] = capability
 
     def get_registry(self):
         return self.registry

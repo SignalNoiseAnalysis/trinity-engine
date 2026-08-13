@@ -8,6 +8,7 @@ Lighting Capability Rules:
 - Always have at least one parameter
 - "all" IS NOT A VALID TARGET ID. 
 - NEVER us "all" as a Target ID
+- Target should always have a type and id
 - Every control_lights command must target exactly one room or device group that exists in the registry. When the user requests all lights, generate one command for every applicable registered room.
 
 
